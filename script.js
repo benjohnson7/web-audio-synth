@@ -1,6 +1,5 @@
 var context = new window.AudioContext();
 var adsr = AudioParam
-var gainNode = context.createGain();
 var maxNotes = 88;
 var wave =  "sine";
 var defS = .1;
@@ -15,30 +14,35 @@ r = .1
 var selection = document.getElementById("selection");
 
 
-gainNode.gain.value = defS;
+
 
 
 class Osc {
 	constructor(freq) {
 		this.freq = freq;
-		this.x = context.createOscillator();
+		this.osc = context.createOscillator();
+		this.gain = context.createGain();
+		this.gain.gain.value = defS;
 	}
 	update() {
-		this.x.frequency.value = this.freq;
-		this.x.type = wave;
+		this.osc.frequency.value = this.freq;
+		this.osc.type = wave;
 		this.ads();
+		this.gain.connect(context.destination);
 	}
 	ads() {
-		this.x.start();
-		this.x.connect(gainNode);
-		gainNode.gain.cancelScheduledValues( context.currentTime );
-		gainNode.gain.linearRampToValueAtTime(s, context.currentTime + a);
-		gainNode.gain.linearRampToValueAtTime(s, context.currentTime + a + d);
+		this.osc.start();
+		this.osc.connect(this.gain);
+		this.gain.gain.cancelScheduledValues( context.currentTime );
+		this.gain.gain.value = 0;
+		this.gain.gain.linearRampToValueAtTime(s, context.currentTime + a);
+		this.gain.gain.linearRampToValueAtTime(s, context.currentTime + a + d);
 	}
 	r() {
-		gainNode.gain.cancelScheduledValues( context.currentTime );
-		gainNode.gain.linearRampToValueAtTime(0, context.currentTime + r);
-		this.x.stop();
+		// generate gain node for each instance of oscillator. currently when r() triggers it releases all notes.
+		this.gain.gain.cancelScheduledValues( context.currentTime );
+		this.gain.gain.linearRampToValueAtTime(0, context.currentTime + r);
+		this.osc.stop();
 		setVol(defS);
 	}
 }
@@ -49,7 +53,6 @@ function setWave(){
 }
 
 function setVol(vol){
-	gainNode.gain.value = vol;
 	defS = vol;
 }
 
@@ -94,7 +97,7 @@ document.addEventListener("keydown", function(e) {
 		freq = notes[e.key];
 		window["osc" + e.key] = new Osc(freq);
 		window["osc" + e.key].update();
-		gainNode.connect(context.destination);
+		
 	}
 });
 
