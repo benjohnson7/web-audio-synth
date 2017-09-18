@@ -39,8 +39,6 @@ class Osc {
 		this.gain.gain.linearRampToValueAtTime(s, context.currentTime + a + d);
 	}
 	r() {
-		// generate gain node for each instance of oscillator. currently when r() triggers it releases all notes.
-		this.gain.gain.cancelScheduledValues( context.currentTime );
 		this.gain.gain.linearRampToValueAtTime(0, context.currentTime + r);
 		this.osc.stop();
 		setVol(defS);
