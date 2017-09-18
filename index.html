@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+
+<head>
+</head>
+
+<body>
+	<div>
+		<select id="selection" onchange="setWave()">
+			<option value="sine">sine</option>
+			<option value="sawtooth">saw</option>
+			<option value="square">square</option>
+			<option value="triangle">triangle</option>
+		</select>
+		<input type="range" min="0" max="1" step=".01" value=".1" onchange="setVol(this.value)">
+		A<input type="range" min="0" max="5" step=".01" value=".1" onchange="setAttack(this.value)">
+		D<input type="range" min="0" max="5" step=".01" value=".1" onchange="setDecay(this.value)">
+		S<input type="range" min="0" max="1" step=".01" value="1" onchange="setSustain(this.value)">
+		R<input type="range" min="0" max="5" step=".01" value=".1" onchange="setRelease(this.value)">
+	</div>
+</body>
+<script type="text/javascript" src="script.js"></script>
+</html>
