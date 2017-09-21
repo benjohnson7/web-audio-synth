@@ -4,20 +4,20 @@ var context = new window.AudioContext(),
 	wave =  "sine",
 	defS = .1,
 	currentKeys = [],
-	selection = document.getElementById("selection"),
-	a = .1,
-	l = .1,
-	d = .1,
-	s = 1,
-	r = .1,
-	v = .4,
-	reverb = false,
-	lp = false,
-	hp = false,
-	bp = false;
+	selection = document.getElementById("selection")
 
-
-
+var values = {
+	a: .1,
+	l: .1,
+	d: .1,
+	s: 1,
+	r: .1,
+	v: .4,
+	reverb: false,
+	lp: false,
+	hp: false,
+	bp: false
+}
 
 class Osc {
 	constructor(freq) {
@@ -33,31 +33,30 @@ class Osc {
 	update() {
 		this.osc.frequency.value = this.freq;
 		this.osc.type = wave;
-		this.ads();
 		this.applyFilter();
+		this.ads();
 	}
 	ads() {
 		let now = context.currentTime;
 		this.osc.start();
 		this.gain.gain.cancelScheduledValues( now );
 		this.gain.gain.value = 0;
-		this.gain.gain.linearRampToValueAtTime(l, now + a);
-		this.gain.gain.linearRampToValueAtTime(s, now + a + d);
+		this.gain.gain.linearRampToValueAtTime(values.l, now + values.a);
+		this.gain.gain.linearRampToValueAtTime(values.s, now + values.a + values.d);
 	}
 	r() {
 		let now = context.currentTime;
-		this.gain.gain.linearRampToValueAtTime(0, now + r);
+		this.gain.gain.linearRampToValueAtTime(0, now + values.r);
 		setTimeout(() => {
 			this.osc.stop()
-		}, r*1000);
+		}, values.r*1000);
 	}
 	applyFilter() {
-		if (lp) {
+		if (values.lp) {
 			this.filter.type = 'lowpass';
-		} else if (hp) {
+		} else if (values.hp) {
 			this.filter.type = 'highpass';
-			console.log("highpass");
-		} else if (bp) {
+		} else if (values.bp) {
 			this.filter.type = 'bandpass';
 		} else {
 			this.filter.type = 'allpass';
@@ -87,34 +86,52 @@ document.getElementById("r").addEventListener("click", function(e){
 	setRelease(e.target.value);
 });
 document.getElementById("filter").addEventListener("change", function(e){
-	setLP(e.target.checked);
+	let checkid = e.target.getAttribute('id');
+	if (checkid == 'lpfilter') {
+		setLP(true);
+		setHP(false);
+		setBP(false);
+	} else if (checkid == 'hpfilter') {
+		setLP(false);
+		setHP(true);
+		setBP(false);
+	} else if (checkid == 'bpfilter') {
+		setLP(false);
+		setHP(false);
+		setBP(true);
+	} else {
+		setLP(false);
+		setHP(false);
+		setBP(false);
+	}
 });
 function setVol(vol){
-	v = vol;
+	values.v = vol;
 }
 function setAttack(x){
-	a = parseFloat(x);
+	values.a = parseFloat(x);
 }
 function setAttackLevel(x){
-	l = parseFloat(x);
+	values.l = parseFloat(x);
 }
 function setDecay(x){
-	d = parseFloat(x);
+	values.d = parseFloat(x);
 }
 function setSustain(x){
-	s = parseFloat(x);
+	values.s = parseFloat(x);
 }
 function setRelease(x){
-	r = parseFloat(x);
+	values.r = parseFloat(x);
 }
 function setLP(x){
-	lp = x;
+	console.log(x);
+	values.lp = x;
 }
 function setHP(x){
-	hp = x;
+	values.hp = x;
 }
 function setBP(x){
-	bp = x;
+	values.bp = x;
 }
 
 
