@@ -1,7 +1,7 @@
 var context = new window.AudioContext(),
 	adsr = AudioParam,
 	maxNotes = 88,
-	wave =  "sine",
+	wave =  "sawtooth",
 	defS = .1,
 	currentKeys = [],
 	selection = document.getElementById("selection")
@@ -86,7 +86,7 @@ document.getElementById("r").addEventListener("click", function(e){
 	setRelease(e.target.value);
 });
 document.getElementById("filter").addEventListener("change", function(e){
-	let checkid = e.target.getAttribute('id');
+	let checkid = e.target.id;
 	if (checkid == 'lpfilter') {
 		setLP(true);
 		setHP(false);
@@ -124,7 +124,6 @@ function setRelease(x){
 	values.r = parseFloat(x);
 }
 function setLP(x){
-	console.log(x);
 	values.lp = x;
 }
 function setHP(x){
