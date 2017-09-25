@@ -161,7 +161,7 @@ function draw() {
 	canvasContext.lineTo(canvas.width, canvas.height / 2);
 	canvasContext.stroke();
 }
-draw();
+// draw();
 
 function setVol(vol) {
 	values.v = vol;
